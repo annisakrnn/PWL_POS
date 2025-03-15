@@ -1,7 +1,7 @@
 * text=auto eol=lf
 
 *.blade.php diff=html
-*.css diff=css
+*.adminlte/adminlte/plugins/ diff=adminlte/adminlte/plugins/
 *.html diff=html
 *.md diff=markdown
 *.php diff=php

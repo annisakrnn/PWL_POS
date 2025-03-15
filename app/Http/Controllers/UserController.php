@@ -211,10 +211,15 @@ class UserController extends Controller
     //     $user->delete();
     //     return redirect('/user');
     //langkah 1 praktikum 2.7
-        $user = UserModel::with('level')->get();
-        //dd($user);
-         //langkah 4 dan 5 praktikum 2.7
-        return view('user', ['data' =>$user]);
+        // $user = UserModel::with('level')->get();
+        // //dd($user);
+        //  //langkah 4 dan 5 praktikum 2.7
+        // return view('user', ['data' =>$user]);
+
+    //Jobsheet 4
+    //langkah 1 praktikum 2.1
+    $user = UserModel::find(1);
+    return view('user', ['data' => $user]);
     }
     
 }
