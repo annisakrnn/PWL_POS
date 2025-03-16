@@ -14,3 +14,4 @@ class WelcomeController extends Controller
         return view('welcome', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu]);
     }
 }
+?>

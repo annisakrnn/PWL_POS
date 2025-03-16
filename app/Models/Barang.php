@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Barang extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,15 +17,15 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'm_user';
-    protected $primaryKey = 'user_id';
+    protected $table = 'm_barang';
+    protected $primaryKey = 'barang_id';
     public $incrementing = true; 
 
     protected $keyType = 'int';
-    protected $fillable = ['user_id', 'username', 'nama', 'password', 'level_id']; 
-    public function level()
+    protected $fillable = ['barang_id', 'kategori_id', 'barang_kode', 'harga_beli', 'harga_jual']; 
+    public function kategori()
     {
-        return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+        return $this->belongsTo(KategoriModel::class, 'kategori_id', 'kategori_id');
     }
     
     /**
@@ -33,18 +33,13 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+
 
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    
+    
 }
