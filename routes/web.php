@@ -16,9 +16,15 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/list', [UserController::class, 'list']);
     Route::get('/create', [UserController::class, 'create']);
     Route::post('/', [UserController::class, 'store']);
+    Route::get('/create_ajax', [UserController::class, 'create_ajax']);
+    Route::post('/ajax', [UserController::class, 'store_ajax']);
     Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/{id}', [UserController::class, 'update']);
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
+    Route::post('/{id}/update_ajax', [UserController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+    Route::post('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 });
     //Tugas Jobsheet 5
