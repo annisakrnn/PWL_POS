@@ -8,7 +8,7 @@
         <div class="card-tools"></div>
     </div>
     <div class="card-body">
-        @empty($supplier)
+        @empty($level)
         <div class="alert alert-danger alert-dismissible">
             <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
             Data yang Anda cari tidak ditemukan.
@@ -17,27 +17,19 @@
         <table class="table table-bordered table-striped table-hover table-sm">
             <tr>
                 <th>ID</th>
-                <td>{{ $supplier->supplier_id }}</td>
+                <td>{{ $level->level_id }}</td>
             </tr>
             <tr>
                 <th>Kode</th>
-                <td>{{ $supplier->supplier_kode }}</td>
+                <td>{{ $level->level_kode }}</td>
             </tr>
             <tr>
                 <th>Nama</th>
-                <td>{{ $supplier->supplier_nama }}</td>
-            </tr>
-            <tr>
-                <th>Alamat</th>
-                <td>{{ $supplier->alamat }}</td>
-            </tr>
-            <tr>
-                <th>Kontak</th>
-                <td>{{ $supplier->kontak }}</td>
+                <td>{{ $level->level_nama }}</td>
             </tr>
         </table>
         @endempty
-        <a href="{{ url('supplier') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+        <a href="{{ url('level') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
     </div>
 </div>
 

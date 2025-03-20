@@ -14,5 +14,5 @@ class SupplierModel extends Model
     
     public $timestamps = false; // Jika tabel tidak memiliki `created_at` dan `updated_at`
 
-    protected $fillable = ['supplier_kode', 'supplier_nama', 'kontak', 'alamat'];
+    protected $fillable = ['supplier_kode', 'supplier_nama', 'alamat', 'kontak'];
 }
