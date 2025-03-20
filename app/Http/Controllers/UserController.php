@@ -201,15 +201,33 @@ class UserController extends Controller
         }
         redirect('/');
     }
+    public function show_ajax(string $id)
+    {
+        $breadcrumb = (object) [
+            'title' => 'Detail User',
+            'list' => ['Home', 'User', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail user',
+        ];
+
+        $activeMenu = 'user'; // set menu yang sedang aktif
+
+        $user = UserModel::with('level')->find($id);
+
+        if (!$user) {
+            return redirect('user')->with('error', 'Data user tidak ditemukan.');
+        }
+
+        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'user' => $user]);
+    }
     public function edit_ajax(string $id)
     {
         $user = UserModel::find($id);
         $level = LevelModel::select('level_id', 'level_nama')->get();
 
-        return view('user.edit_ajax', [
-            'user' => $user,
-            'level' => $level
-        ]);
+        return view('user.edit_ajax', ['user' => $user,'level' => $level]);
     }
     public function update_ajax(Request $request, $id)
     {

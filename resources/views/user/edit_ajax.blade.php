@@ -23,8 +23,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -58,7 +57,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary" id="btn-simpan">Simpan</button>
             </div>
         </div>
     </div>
@@ -73,19 +72,22 @@
             password: { minlength: 6, maxlength: 20 }
         },
         submitHandler: function(form) {
+            let btnSimpan = $('#btn-simpan');
+            btnSimpan.prop('disabled', true);
             $.ajax({
                 url: form.action,
                 type: form.method,
                 data: $(form).serialize(),
                 success: function(response) {
                     if (response.status) {
-                        $('#modal-master').modal('hide');
+                        // $('#modal-master').modal('hide');
+                        $('#myModal').modal('hide');
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: response.message
                         });
-                        dataTable.ajax.reload();
+                        dataUser.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {
