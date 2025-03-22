@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\AuthController;
 use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\Supplier;
@@ -11,7 +12,15 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WelcomeController;
 
 //Jobsheet 5
-Route::get('/', [WelcomeController::class, 'index']);
+//auth
+Route::pattern('id', '[0+9]+');
+Route::get('login', [AuthController::class, 'login'])->name('login.form');
+Route::post('login', [AuthController::class, 'postlogin'])->name('login');
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::middleware(['auth'])->group(function(){
+    Route::get('/', [WelcomeController::class, 'index']);
+});
+//Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index']);
@@ -32,6 +41,7 @@ Route::group(['prefix' => 'user'], function () {
 });
     //Tugas Jobsheet 5
 // m_level
+
 Route::group(['prefix' => 'level'], function () {
 Route::get('/', [LevelController::class, 'index']);
 Route::post('/list', [LevelController::class, 'list']);
@@ -103,6 +113,7 @@ Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
 Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
 Route::delete('/{id}', [SupplierController::class, 'destroy']);
 });
+
 // Route::get('/', function() {
 //     return view('welcome');
 // });
