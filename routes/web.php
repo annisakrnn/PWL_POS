@@ -17,12 +17,15 @@ Route::pattern('id', '[0+9]+');
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
+
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('register', [AuthController::class, 'postregister']);
+
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [WelcomeController::class, 'index']);
 });
-//Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index']);
@@ -43,7 +46,7 @@ Route::group(['prefix' => 'user'], function () {
 });
     //Tugas Jobsheet 5
 // m_level
-Route::middleware(['authorize:ADM2'])->group(function(){
+Route::middleware(['authorize:ADM2,STF'])->group(function(){
 Route::group(['prefix' => 'level'], function () {
 Route::get('/', [LevelController::class, 'index']);
 Route::post('/list', [LevelController::class, 'list']);
