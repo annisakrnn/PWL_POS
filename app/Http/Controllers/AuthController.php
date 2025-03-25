@@ -39,6 +39,14 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('login');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Logout Berhasil',
+                'redirect' => url('login')
+    ]);
     }
+    return redirect('login')->with('message', 'Logout Berhasil');
+}
 }
