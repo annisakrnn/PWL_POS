@@ -46,7 +46,7 @@ Route::group(['prefix' => 'user'], function () {
 });
     //Tugas Jobsheet 5
 // m_level
-Route::middleware(['authorize:ADM2,STF'])->group(function(){
+// Route::middleware(['authorize:ADM2,STF'])->group(function(){
 Route::group(['prefix' => 'level'], function () {
 Route::get('/', [LevelController::class, 'index']);
 Route::post('/list', [LevelController::class, 'list']);
@@ -62,9 +62,11 @@ Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
 Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);
 Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
 Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
+Route::get('/import', [LevelController::class, 'import']);
+Route::post('/import_ajax', [LevelController::class, 'import_ajax']);
 Route::delete('/{id}', [LevelController::class, 'destroy']);
 });
-});
+// });
 //m_kategori
 Route::group(['prefix' => 'kategori'], function () {
 Route::get('/', [KategoriController::class, 'index']);
