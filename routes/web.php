@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\AuthController;
+use App\Models\Kategori;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
@@ -85,6 +87,8 @@ Route::get('/{id}/edit_ajax', [KategoriController::class, 'edit_ajax']);
 Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax']);
 Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
 Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
+Route::get('/import', [KategoriController::class, 'import']);
+Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);
 Route::delete('/{id}', [KategoriController::class, 'destroy']);
 });
 //m_barang
@@ -123,6 +127,8 @@ Route::get('/{id}/edit_ajax', [SupplierController::class, 'edit_ajax']);
 Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax']);
 Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
 Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
+Route::get('/import', [SupplierController::class, 'import']);
+Route::post('/import_ajax', [SupplierController::class, 'import_ajax']);
 Route::delete('/{id}', [SupplierController::class, 'destroy']);
 });
 
