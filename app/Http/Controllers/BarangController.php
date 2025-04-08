@@ -389,20 +389,13 @@ class BarangController extends Controller
         // Ambil data barang dengan filter kategori jika ada
         $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
             ->orderBy('kategori_id')
-            ->with('kategori');
-        
-        if ($request->query('filter_kategori')) {
-            $barang->where('kategori_id', $request->query('filter_kategori'));
-        }
+            ->with('kategori')
+            ->get();
 
-        $barang = $barang->get();
 
-        if ($barang->isEmpty()) {
-            return redirect()->back()->with('error', 'Tidak ada data barang untuk diekspor.');
-        }
-
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        //load library excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet(); //ambil sheet yang aktif
 
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Kode Barang');
@@ -418,9 +411,9 @@ class BarangController extends Controller
             $sheet->setCellValue('A'.$baris, $no);
             $sheet->setCellValue('B'.$baris, $value->barang_kode);
             $sheet->setCellValue('C'.$baris, $value->barang_nama);
-            $sheet->setCellValue('D'.$baris, number_format($value->harga_beli, 0, ',', '.'));
-            $sheet->setCellValue('E'.$baris, number_format($value->harga_jual, 0, ',', '.'));
-            $sheet->setCellValue('F'.$baris, $value->kategori ? $value->kategori->kategori_nama : '-');
+            $sheet->setCellValue('D'.$baris, $value->harga_beli);
+            $sheet->setCellValue('E'.$baris, $value->harga_jual);
+            $sheet->setCellValue('F'.$baris, $value->kategori->kategori_nama);
             $baris++;
             $no++;
         }
