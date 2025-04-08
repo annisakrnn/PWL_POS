@@ -444,8 +444,6 @@ class BarangController extends Controller
         ->orderBy('barang_kode')
         ->with('kategori')  
         ->get();
-    
-    // Generate PDF using Barryvdh\DomPDF
     $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);
     $pdf->setPaper('a4', 'portrait');
     $pdf->setOption("isRemoteEnabled", true);

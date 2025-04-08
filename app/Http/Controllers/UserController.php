@@ -6,6 +6,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\LevelModel;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Barryvdh\DomPDF\Facade\Pdf;
 class UserController extends Controller
 {
     public function index()
@@ -398,6 +399,21 @@ class UserController extends Controller
         $writer->save('php://output');
         exit;
     }
+    public function export_pdf()
+{
+        $user = UserModel::select('user_id', 'level_id', 'username', 'nama', 'password')
+        ->orderBy('level_id')
+        ->orderBy('user_id')
+        ->with('level')
+        ->get();
+
+    $pdf = Pdf::loadView('user.export_pdf', ['user' => $user]);
+    $pdf->setPaper('a4', 'portrait');
+    $pdf->setOption("isRemoteEnabled", true);
+    $pdf->render();
+
+    return $pdf->stream('Data User '.date('Y-m-d H:i:s').'.pdf');
+}
 }
 
 
