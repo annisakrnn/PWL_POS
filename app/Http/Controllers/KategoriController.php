@@ -319,6 +319,52 @@ class KategoriController extends Controller
             } 
         } 
         return redirect('/'); 
-    } 
+    }
+    public function export_excel(Request $request)
+    {
+        // Ambil data barang dengan filter kategori jika ada
+        $kategori = KategoriModel::select('kategori_id', 'kategori_kode', 'kategori_nama')
+            ->get();
+
+
+        //load library excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet(); //ambil sheet yang aktif
+
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Kode');
+        $sheet->setCellValue('C1', 'Nama');
+
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true);
+
+        $no = 1;
+        $baris = 2;
+        foreach ($kategori as $value) {
+            $sheet->setCellValue('A'.$baris, $no);
+            $sheet->setCellValue('B'.$baris, $value->kategori_kode);
+            $sheet->setCellValue('C'.$baris, $value->kategori_nama);
+            $baris++;
+            $no++;
+        }
+
+        foreach (range('A', 'C') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Kategori');
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data_Kategori_'.date('Y-m-d_His').'.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
+    }
 }
+
 

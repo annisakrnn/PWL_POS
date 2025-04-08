@@ -91,6 +91,7 @@ Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
 Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
 Route::get('/import', [KategoriController::class, 'import']);
 Route::post('/import_ajax', [KategoriController::class, 'import_ajax']);
+Route::get('/export_excel', [KategoriController::class, 'export_excel']);
 Route::delete('/{id}', [KategoriController::class, 'destroy']);
 });
 //m_barang
