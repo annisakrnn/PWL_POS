@@ -14,6 +14,7 @@
           <a href="#" class="nav-link">Contact</a>
         </li>
       </ul>
+      </ul>
       <!--end::Start Navbar Links-->
       <!--begin::End Navbar Links-->
       <ul class="navbar-nav ml-auto">
@@ -153,26 +154,26 @@
         <li class="nav-item dropdown user-menu">
           <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
             <img
-              src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}"
+              src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user2-160x160.jpg') }}"
               class="img-circle"
               alt="User Image"
               style="width: 25px; height: 25px;"
             />
-            <span class="d-none d-md-inline">Alexander Pierce</span>
+            <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
             <!--begin::User Image-->
             <li class="user-header text-bg-primary">
               <img
-                src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}"
-                class="rounded-circle shadow"
-                alt="User Image"
+                  src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user2-160x160.jpg') }}"
+                  class="rounded-circle shadow"
+                  alt="Foto Profil"
               />
               <p>
-                Alexander Pierce - Web Developer
-                <small>Member since Nov. 2023</small>
+                  {{ Auth::user()->name }} - Web Developer
+                  <small>Anggota sejak {{ Auth::user()->created_at->format('M. Y') }}</small>
               </p>
-            </li>
+          </li>
             <!--end::User Image-->
             <!--begin::Menu Body-->
             <li class="user-body">
@@ -187,7 +188,9 @@
             <!--end::Menu Body-->
             <!--begin::Menu Footer-->
             <li class="user-footer">
-              <a href="#" class="btn btn-default btn-flat">Profile</a>
+              <li class="nav-item d-none d-sm-inline-block">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</a>
+              </li>
               <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
             </li>
             <!--end::Menu Footer-->
@@ -200,3 +203,46 @@
     <!--end::Container-->
   </nav>
   <!--end::Header-->
+  <!-- Modal untuk Edit Profil -->
+  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+
+                <form action="{{ route('profile.update-photo') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PATCH')
+                    <div class="mb-3">
+                        <label for="profile_photo" class="form-label">Foto Profil</label>
+                        <input type="file" name="profile_photo" id="profile_photo" class="form-control" accept="image/*">
+                        @error('profile_photo')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Foto Saat Ini</label><br>
+                        @if (Auth::user()->profile_photo)
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" width="100" class="rounded-circle">
+                        @else
+                            <p>Belum ada foto profil</p>
+                        @endif
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary me-2">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>

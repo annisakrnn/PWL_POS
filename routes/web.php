@@ -9,9 +9,16 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Hash;
+
+//profile
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/update-photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
+});
 
 //Jobsheet 5
 //auth
