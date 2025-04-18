@@ -1,6 +1,9 @@
 <!--begin::Header-->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!--begin::Container-->
+
+
+    
     <div class="container-fluid">
       <!--begin::Start Navbar Links-->
       <ul class="navbar-nav">
@@ -171,7 +174,7 @@
               />
               <p>
                   {{ Auth::user()->name }} - Web Developer
-                  <small>Anggota sejak {{ Auth::user()->created_at->format('M. Y') }}</small>
+                  <small>Anggota sejak {{ Auth::user()->created_at->format('d-m-Y') }}</small>
               </p>
           </li>
             <!--end::User Image-->

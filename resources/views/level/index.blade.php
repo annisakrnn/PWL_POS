@@ -2,6 +2,7 @@
 
 @section('content')
 
+{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">{{ $page->title }}</h3>
@@ -55,9 +56,19 @@ data-keyboard="false" data-width="75%" aria-hidden="true"></div>
           serverSide: true,
           ajax: {
               "url": "{{ url('level/list') }}",
-              "dataType": "json",
-              "type": "POST",
-          },
+            //   "dataType": "json",
+            //   "type": "POST",
+            type: 'POST',
+    data: {
+        // Data yang ingin dikirim
+    },
+    success: function(response) {
+        console.log('Berhasil:', response);
+    },
+    error: function(xhr) {
+        console.log('Error:', xhr);
+    }
+        },
           columns: [
             {
                 // nomor urut dari laravel datatable addIndexColumn()

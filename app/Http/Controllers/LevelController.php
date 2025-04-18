@@ -31,7 +31,7 @@ class LevelController extends Controller
     public function list(Request $request)
     {
         $levels = LevelModel::select('level_id', 'level_kode', 'level_nama');
-
+        dd($levels);
         return DataTables::of($levels)
             ->addIndexColumn() // menambahkan kolom index / no urut (default nama kolom:DT_RowIndex)
             ->addColumn('aksi', function ($level) { // menambahkan kolom aksi 
@@ -80,6 +80,7 @@ class LevelController extends Controller
 
     public function show(string $id)
     {
+         
         $breadcrumb = (object) [
             'title' => 'Detail Level',
             'list' => ['Home', 'Level', 'Detail']
@@ -179,6 +180,7 @@ class LevelController extends Controller
     }
     public function show_ajax(string $id)
     {
+        dd($id);
         $breadcrumb = (object) [
             'title' => 'Detail Level',
             'list' => ['Home', 'Level', 'Detail']
