@@ -37,16 +37,16 @@ Route::middleware(['auth'])->group(function(){
 });
 
 Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [UserController::class, 'index']);
-    Route::get('/list', [UserController::class, 'list']);
-    Route::get('/create', [UserController::class, 'create']);
-    Route::post('/', [UserController::class, 'store']);
+    Route::get('/', [UserController::class, 'index']); //tampilan halaman awal user
+    Route::get('/list', [UserController::class, 'list']); //menampilkan data user dalam bentuk json untuk data tables
+    Route::get('/create', [UserController::class, 'create']); //menampilkan halaman form tambah user
+    Route::post('/', [UserController::class, 'store']); //menyimpan data user baru
     Route::get('/create_ajax', [UserController::class, 'create_ajax']);
-    Route::post('/ajax', [UserController::class, 'store_ajax']);
-    Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::post('/ajax', [UserController::class, 'store_ajax']); 
+    Route::get('/{id}', [UserController::class, 'show'])->name('user.show'); //menampilkan detail user
     Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/{id}', [UserController::class, 'update']);
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit'); //menampilkan halaman edit user
+    Route::put('/{id}', [UserController::class, 'update']); //menyimpan peruubahan data user
     Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
     Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
     Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
@@ -55,7 +55,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/import_ajax', [UserController::class, 'import_ajax']);
     Route::get('/export_excel', [UserController::class, 'export_excel']);
     Route::get('/export_pdf', [UserController::class, 'export_pdf']);
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy'); //menghapus data
 });
     //Tugas Jobsheet 5
 // m_level

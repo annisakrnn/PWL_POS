@@ -9,33 +9,34 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Barryvdh\DomPDF\Facade\Pdf;
 class UserController extends Controller
 {
-    public function index()
+    public function index() //untuk menampilkan halaman daftar pengguna
     {
-        $breadcrumb = (object) [
-            'title' => 'Daftar User',
-            'list' => ['Home', 'User']
+        $breadcrumb = (object) [  //objek yang dibuat dari array menggunakan casting (object).
+            'title' => 'Daftar User', //judul
+            'list' => ['Home', 'User'] //daftar item dalam breadcrumb yaitu contemt-header
         ];
 
-        $page = (object) [
+        $page = (object) [ //objek yang dibuat dari array menggunakan casting (object).
             'title' => 'Daftar user yang terdaftar dalam sistem',
         ];
-
-        $activeMenu = 'user';
-        $level = LevelModel::all();
+ 
+        $activeMenu = 'user'; //set menu user yang sedang active
+        $level = LevelModel::all(); //menambil semua data pada database
 
         return view('user.index', compact('breadcrumb', 'page', 'activeMenu', 'level'));
-    }
+    }   //mengembalikan halaman view blade yang akan di render dan compact dll mengirimkan variabel dari databes ke view agar data bisa diakses
 
-    public function list(Request $request)
+    public function list(Request $request) //ambi; data user dalam bentuk json untuk datatables
     {
         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')->with('level');
 
         if ($request->level_id){
-            $users->where('level_id',$request->level_id);
+            $users->where('level_id',$request->level_id); //untuk filter data pengguna berdasarkan level_id
         }
             return DataTables::of($users)
+            //menambahkan kolom index/no urut default nama kolom
                 ->addIndexColumn()
-                ->addColumn('aksi', function ($user) {
+                ->addColumn('aksi', function ($user) { //menambahkan kolom aksi
                 $btn = '<button onclick="modalAction(\''.url('/user/' . $user->user_id .
                 '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\''.url('/user/' . $user->user_id .
@@ -44,13 +45,13 @@ class UserController extends Controller
                 '/delete_ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';
                     return $btn;
                 })
-                ->rawColumns(['aksi'])
+                ->rawColumns(['aksi']) //memmberitahu bahwa kolom aksi adalah html
                 ->make(true);
         
     }
 
 
-    public function create()
+    public function create() //tampilan halaman form tambah user
     {
         $breadcrumb = (object) [
             'title' => 'Tambah User',
@@ -67,26 +68,27 @@ class UserController extends Controller
         return view('user.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'level' => $level]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request) //menyimpan data user baru
     {
         $request->validate([
+            //username harus diisii minimal 3 karakter dan unik
             'username' => 'required|string|min:3|unique:m_user,username',
-            'nama' => 'required|string|max:100',
+            'nama' => 'required|string|max:100', //nama harus diisii minimal 100 karakter
             'password' => 'required|min:5',
-            'level_id' => 'required|integer',
+            'level_id' => 'required|integer', //level harus diisi dan angka
         ]);
 
         UserModel::create([
             'username' => $request->username,
             'nama' => $request->nama,
-            'password' => bcrypt($request->password),
+            'password' => bcrypt($request->password), //password dienkripsi semebul disimpan
             'level_id' => $request->level_id,
         ]);
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan!');
     }
 
-    public function show(string $id)
+    public function show(string $id) //menmpilkan detail user
     {
         $breadcrumb = (object) [
             'title' => 'Detail User',
@@ -108,7 +110,7 @@ class UserController extends Controller
         return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'user' => $user]);
     }
 
-    public function edit(string $id)
+    public function edit(string $id) //halaman form edit
     {
         $breadcrumb = (object) [
             'title' => 'Edit User',
@@ -127,7 +129,7 @@ class UserController extends Controller
         return view('user.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'user' => $user, 'level' => $level]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id) //menyimpan perubahan data user
     {
         $request->validate([
             // username harus diisi, berupa string, minimal 3 karakter,
@@ -223,14 +225,15 @@ class UserController extends Controller
 
         return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'user' => $user]);
     }
-    public function edit_ajax(string $id)
+
+    public function edit_ajax(string $id) //manampilkan halaman form edit user ajax
     {
         $user = UserModel::find($id);
         $level = LevelModel::select('level_id', 'level_nama')->get();
 
         return view('user.edit_ajax', ['user' => $user,'level' => $level]);
     }
-    public function update_ajax(Request $request, $id)
+    public function update_ajax(Request $request, $id) //cek apakah request dari ajax
     {
         if($request->ajax() || $request->wantsJson()){
             $rules = [
@@ -240,19 +243,19 @@ class UserController extends Controller
                 'password' => 'nullable|min:6|max:20'
             ];
 
-            $validator = Validator::make($request->all(), $rules);
+            $validator = Validator::make($request->all(), $rules); //untuk validasi data dan menagmbil dari method all
     
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => false,
+                    'status' => false, //resepon false: gagal, true: berhasil
                     'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors()
+                    'msgField' => $validator->errors() //menunjukkan filed mana yang error
                 ]);
             }
             $check = UserModel::find($id);
             if ($check) {
                 if(!$request->filled('password')){
-                    $request->request->remove('password');
+                    $request->request->remove('password'); //jika hapus tidak disi maka hapus dari request
                 }
 
                 $check->update($request->all());

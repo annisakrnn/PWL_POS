@@ -13,9 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $breadcrumb = (object) [
@@ -61,10 +59,8 @@ class BarangController extends Controller
             ->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+ 
+    public function create() //tampilan form tambah barang
     {
         $breadcrumb = (object) [
             'title' => 'Tambah Barang',
@@ -82,10 +78,8 @@ class BarangController extends Controller
         return view('barang.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'kategori' => $kategori]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(Request $request) //menampilkan halaman untuk tambah hingga sukses
     {
         $request->validate([
             'barang_kode' => 'required|string|max:10|unique:m_barang,barang_kode',
@@ -107,9 +101,9 @@ class BarangController extends Controller
     }
 
     /**
-     * Display the specified resource.
+   
      */
-    public function show(string $id)
+    public function show(string $id) //tampilan detail
     {
         $breadcrumb = (object) [
             'title' => 'Detail Barang',
@@ -127,10 +121,7 @@ class BarangController extends Controller
         return view('barang.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'barang' => $barang]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(string $id) //tampilan halaman edit
     {
         $breadcrumb = (object) [
             'title' => 'Edit Barang',
@@ -149,10 +140,8 @@ class BarangController extends Controller
         return view('barang.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'barang' => $barang, 'kategori' => $kategori]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, string $id) //tampilan untuk update hingga sukses
     {
         $request->validate([
             'barang_kode' => 'required|string|max:10|unique:m_barang,barang_kode,' . $id . ',barang_id',
@@ -173,10 +162,8 @@ class BarangController extends Controller
         return redirect('/barang')->with('success', 'Data barang berhasil diubah!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function destroy(string $id) //tampilan untuk hapus barang
     {
         $check = BarangModel::find($id);
 
@@ -305,8 +292,8 @@ class BarangController extends Controller
         try {
             if ($request->ajax() || $request->wantsJson()) {
                 $barang = BarangModel::find($id);
-                if ($barang) {
-                    $barang->delete();
+                if ($barang) { //jika sudah ditemukan
+                    $barang->delete(); //barang dihapus
                     return response()->json([
                         'status' => true,
                         'message' => 'Data berhasil dihapus'
@@ -398,6 +385,7 @@ class BarangController extends Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet(); //ambil sheet yang aktif
 
+        //setCellValue untuk menulis nilai ke sel tertentu pada sheet berdasarkan kolom
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Kode Barang');
         $sheet->setCellValue('C1', 'Nama Barang');
@@ -406,9 +394,9 @@ class BarangController extends Controller
         $sheet->setCellValue('F1', 'Kategori');
         $sheet->getStyle('A1:F1')->getFont()->setBold(true);
 
-        $no = 1;
-        $baris = 2;
-        foreach ($barang as $value) {
+        $no = 1; //menyimpan nomor urut
+        $baris = 2; //menunjukkan baris
+        foreach ($barang as $value) { //mengiterasi koleksi $barang untuk menulis data setiap barang ke sheet.
             $sheet->setCellValue('A'.$baris, $no);
             $sheet->setCellValue('B'.$baris, $value->barang_kode);
             $sheet->setCellValue('C'.$baris, $value->barang_nama);
@@ -419,17 +407,17 @@ class BarangController extends Controller
             $no++;
         }
 
-        foreach (range('A', 'F') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true);
-        }
+        foreach (range('A', 'F') as $columnID) {  //menghasilkan aaray kolom a-f
+            $sheet->getColumnDimension($columnID)->setAutoSize(true); //mengatur dimensi agar otomatis
+        } 
 
-        $sheet->setTitle('Data Barang');
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $filename = 'Data_Barang_'.date('Y-m-d_His').'.xlsx';
+        $sheet->setTitle('Data Barang'); //judul file
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx'); //format file
+        $filename = 'Data_Barang_'.date('Y-m-d_His').'.xlsx'; //format tanggal pada judul
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$filename.'"');
-        header('Cache-Control: max-age=0');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //type file
+        header('Content-Disposition: attachment;filename="'.$filename.'"'); //untuk mengunduh dengan nama yang ditentukan
+        header('Cache-Control: max-age=0'); //mengatur cache agar file dianggap baru
         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
         header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
         header('Pragma: public');
@@ -439,15 +427,17 @@ class BarangController extends Controller
     }
     public function export_pdf()
 {
+    //mengambil data barang
     $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
         ->orderBy('kategori_id')
         ->orderBy('barang_kode')
         ->with('kategori')  
         ->get();
-    $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);
+    //membuat pdf
+    $pdf = Pdf::loadView('barang.export_pdf', ['barang' => $barang]);  //menggunakan library PDF (kemungkinan Dompdf atau Snappy) untuk memuat view
     $pdf->setPaper('a4', 'portrait');
-    $pdf->setOption("isRemoteEnabled", true);
-    $pdf->render();
+    $pdf->setOption("isRemoteEnabled", true); // untukpemuatan sumber daya eksternal (misalnya, gambar atau CSS dari URL) dalam PDF.
+    $pdf->render(); 
 
     return $pdf->stream('Data Barang '.date('Y-m-d H:i:s').'.pdf');
 }

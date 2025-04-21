@@ -31,7 +31,7 @@
           </a> 
         </li> 
         <li class="nav-item"> 
-          <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user')? 
+          <a href="{{ url('/user') }}" class="nav-link {{ ($activeMenu == 'user')?  //jika di klik bisa mengarahkan ke halaman user
   'active' : '' }}"> 
             <i class="nav-icon far fa-user"></i> 
             <p>Data User</p> 

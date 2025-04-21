@@ -37,7 +37,7 @@
                 <label class="col-1 control-label col-form-label">Username</label>
                 <div class="col-11">
                     <input type="text" class="form-control" id="username" name="username"
-                        value="{{ old('username', $user->username) }}" required>
+                         value="{{ old('username', $user->username) }}" required> {{--old('username', $user->username) akan menggunakan $user->username sebagai nilai default jika tidak ada nilai lama. --}}
                     @error('username')
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror

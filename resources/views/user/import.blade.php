@@ -39,14 +39,14 @@ $(document).ready(function() {
                 extension: "xlsx"
             },
         },
-        submitHandler: function(form) {
-            var formData = new FormData(form);
+        submitHandler: function(form) { //dipanggil jika lolos validasi
+            var formData = new FormData(form); //Membuat objek FormData dari formulir untuk mengumpulkan semua data input, termasuk field teks, dropdown, dan file (seperti input <input type="file">).
             $.ajax({
-                url: form.action,
+                url: form.action, //mengambil url tujuan atribut misal /barang/ajax
                 type: form.method,
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: formData, //mengirimkan form data
+                processData: false, //mencegahjQuery memproses formData menjadi string query (diperlukan untuk FormData agar file dikirim dengan benar).
+                contentType: false, //menghapusheader Content-Type default (application/x-www-form-urlencoded) dan membiarkan browser menetapkan multipart/form-data dengan batas yang sesuai untuk unggahan file.
                 success: function(response) {
                     if (response.status) {
                         $('#myModal').modal('hide');
@@ -55,7 +55,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        tableBarang.ajax.reload();
+                        tableBarang.ajax.reload(); //memperbarui tabel datatable dengan data baru
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
+            <h3 class="card-title">{{ $page->title }}</h3> 
             <div class="card-tools">
                     <button onclick="modalAction('{{ url('/user/import') }}')" class="btn btn-info">Import User</button>
                     {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a> --}}
@@ -28,13 +28,13 @@
                     </div>
                 </div>
             </div>
-            @if (session('success'))
+            @if (session('success'))  {{--alert untuk pesan sukses atau gagal saat menaambah, dll --}}
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_user"> 
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -48,38 +48,41 @@
         </div>
     </div>
     <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+    {{-- modal aksi ajax --}}
 @endsection
 
 @push('js')
     <script>
-        function modalAction(url = '') {
+        function modalAction(url = '') { //untuk memuat konten dari url modak dan menampilkan dengan jquery
             $('#myModal').load(url, function() {
                 $('#myModal').modal('show');
             });
         }
 
-        var dataUser;
-        $(document).ready(function () {
-            dataUser = $('#table_user').DataTable({
-                serverSide: true,
+        var dataUser; //DataTable
+        $(document).ready(function () { 
+            dataUser = $('#table_user').DataTable({ //mengubah tabel HTML menjadi tabel interaktif dengan fitur seperti paginasi, pencarian, dan pengurutan.
+                serverSide: true, //serverSide: true jika ingin menggunakan server side processing
                 ajax: {
                     url: "{{ url('user/list') }}",
                     dataType: "json",
                     type: "GET",
-                    data: function(d) {
-                        d.level_id = $('#level_id').val();
+                    data: function(d) { //Menambahkan parameter level_id (nilai dari dropdown filter) ke permintaan AJAX, sehingga tabel hanya menampilkan pengguna dengan level tertentu.
+                        d.level_id = $('#level_id').val(); 
                     }
                 },
                 columns: [
-                    { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
+                    { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false }, //nomor urut baris
                     { data: "username", className: "", orderable: true, searchable: true },
                     { data: "nama", className: "", orderable: true, searchable: true },
                     { data: "level.level_nama", className: "", orderable: false, searchable: false },
                     { data: "aksi", className: "", orderable: false, searchable: false }
+                    //orderable true untuk komom ini bisa diurutkan
+                    //searchable true jika ingin kolom bisa dicari
                 ]
             });
 
-            $('#level_id').on('change', function() {
+            $('#level_id').on('change', function() { //untuk filter
                 dataUser.ajax.reload();
             });
         });

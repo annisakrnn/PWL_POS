@@ -20,9 +20,9 @@ class AuthController extends Controller
 
     public function postlogin(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $credentials = $request->only('username', 'password');
-            if (Auth::attempt($credentials)) {
+        if ($request->ajax() || $request->wantsJson()) { 
+            $credentials = $request->only('username', 'password'); 
+            if (Auth::attempt($credentials)) { 
                 return response()->json([
                     'status' => true,
                     'message' => 'Login Berhasil',
@@ -39,9 +39,9 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        Auth::logout(); 
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken(); 
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
@@ -60,8 +60,7 @@ class AuthController extends Controller
         // mengambil data untuk dropdown
         $levels = LevelModel::all();
 
-        // log untuk debugging
-        \Log::info('Data Levels di AuthController', [
+        Log::info('Data Levels di AuthController', [
             'levels_count' => $levels->count(),
             'levels_data' => $levels->toArray()
         ]);
@@ -98,7 +97,7 @@ class AuthController extends Controller
 
             // login otomatis setelah registrasi
             $credentials = $request->only('username', 'password');
-            if (Auth::attempt($credentials)) {
+            if (Auth::attempt($credentials)) { 
                 return response()->json([
                     'status' => true,
                     'message' => 'Registrasi dan Login Berhasil',

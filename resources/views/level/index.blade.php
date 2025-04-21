@@ -2,7 +2,6 @@
 
 @section('content')
 
-{{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">{{ $page->title }}</h3>
