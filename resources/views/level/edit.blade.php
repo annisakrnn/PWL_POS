@@ -18,7 +18,7 @@
         <form method="POST" action="{{ url('/level/'.$level->level_id) }}" class="form-horizontal">
             @csrf
             {!! method_field('PUT') !!}
-            <!-- tambahkan baris ini untuk proses edit yang butuh method PUT -->
+
             <div class="form-group row">
                 <label class="col-1 control-label col-form-label">Kode</label>
                 <div class="col-11">

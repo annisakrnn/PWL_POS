@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\AuthController;
 use App\Models\Kategori;
@@ -68,7 +68,7 @@ Route::group(['prefix' => 'level'], function () {
     Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
     Route::post('/ajax', [LevelController::class, 'store_ajax']);
     Route::get('/{id}', [LevelController::class, 'show']);
-    Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
+    Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax'])->name('level.show_ajax');
     Route::get('/{id}/edit', [LevelController::class, 'edit']);
     Route::put('/{id}', [LevelController::class, 'update']);
     Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
