@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->string('pembeli', 50)->unique();
             $table->string('penjualan_kode', 20);
-            $table->dateTime('penjualan_tnggal');
+            $table->dateTime('penjualan_tanggal');
             $table->timestamps();
 
             //mendefinisikan foreign key pada kolom level_id mengacu pada kolom level_id di tabel m_level

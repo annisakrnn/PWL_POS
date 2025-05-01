@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable; // implementasi class Authenticatable
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class UserModel extends Authenticatable implements JWTSubject
 {
@@ -14,14 +15,20 @@ class UserModel extends Authenticatable implements JWTSubject
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
-    protected $fillable = ['username', 'password', 'nama', 'level_id', 'created_at', 'updated_at'];
+    protected $fillable = ['username', 'password', 'nama', 'level_id', 'profile_photo', 'created_at', 'updated_at'];
     protected $hidden = ['password']; // jangan di tampilkan saat select
     protected $casts = ['password' => 'hashed']; // casting password agar otomatis di hash
     /**
      * Relasi ke tabel level*/
-    public function level(): BelongsTo
+    public function level()
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+    }
+    protected function profilePhoto(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? url('/storage/posts/' . $value) : null,
+        );
     }
     /**mendapatkan nama role*/
     public function getRoleName(): string{
